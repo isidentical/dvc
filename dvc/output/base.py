@@ -268,7 +268,7 @@ class BaseOutput:
 
     # pylint: enable=no-member
 
-    def save(self):
+    def save(self, dry=False):
         if not self.exists:
             raise self.DoesNotExistError(self)
 
@@ -284,7 +284,8 @@ class BaseOutput:
             self.verify_metric()
 
         if not self.use_cache:
-            self.hash_info = self.get_hash()
+            if not dry:
+                self.hash_info = self.get_hash()
             if not self.IS_DEPENDENCY:
                 logger.debug(
                     "Output '%s' doesn't use cache. Skipping saving.", self
@@ -297,7 +298,8 @@ class BaseOutput:
             logger.debug("Output '%s' didn't change. Skipping saving.", self)
             return
 
-        self.hash_info = self.get_hash()
+        if not dry:
+            self.hash_info = self.get_hash()
         self.isexec = self.isfile() and self.tree.isexec(self.path_info)
 
     def set_exec(self):

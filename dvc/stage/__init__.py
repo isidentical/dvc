@@ -448,9 +448,9 @@ class Stage(params.StageParams):
 
         self.repo.stage_cache.save(self)
 
-    def save_deps(self):
+    def save_deps(self, dry=False):
         for dep in self.deps:
-            dep.save()
+            dep.save(dry=dry)
 
     def save_outs(self, allow_missing=False):
         from dvc.output.base import OutputDoesNotExistError

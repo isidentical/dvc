@@ -65,7 +65,7 @@ class RepoDependency(LocalDependency):
     def status(self):
         return self.workspace_status()
 
-    def save(self):
+    def save(self, dry=False):
         pass
 
     def dumpd(self):
