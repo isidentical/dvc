@@ -12,7 +12,6 @@ env:
   DVC_TEST: "true"
   HOMEBREW_NO_AUTO_UPDATE: 1
   SHELL: /bin/bash
-  GDRIVE_CREDENTIALS_DATA: ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   GS_CREDS_JSON: ${{ secrets.GS_CREDS_JSON }}
@@ -87,6 +86,9 @@ jobs:
       run: |
         mkdir -p scripts/ci
         echo "$GS_CREDS_JSON" > scripts/ci/gcp-creds.json
+    - name: setup gdrive creds
+      if: matrix.os == 'ubuntu-18.04'
+      run: echo "GDRIVE_CREDENTIALS_DATA=${{ secrets.GDRIVE_CREDENTIALS_DATA }}" >> $GITHUB_ENV
     - name: run tests
       run: python -m tests --all --cov-report=xml --cov-report=term --tap-combined -n=4
     - name: upload coverage report
