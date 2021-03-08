@@ -277,7 +277,7 @@ class GDriveFileSystem(BaseFileSystem):
         # a lot of different errors - broken credentials file, refresh token
         # expired, flow failed, etc.
         except Exception as exc:
-            raise GDriveAuthError(self.credentials_location) from exc
+            raise exc
         finally:
             if is_credentials_temp:
                 os.remove(temporary_save_path)
