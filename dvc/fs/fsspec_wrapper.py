@@ -45,7 +45,9 @@ class FSSpecWrapper(BaseFileSystem):
     def open(
         self, path_info, mode="r", **kwargs
     ):  # pylint: disable=arguments-differ
-        return self.fs.open(self._with_bucket(path_info), mode=mode)
+        return self.fs.open(
+            self._with_bucket(path_info), mode=mode, consistency=None
+        )
 
     def copy(self, from_info, to_info):
         self.fs.copy(self._with_bucket(from_info), self._with_bucket(to_info))
