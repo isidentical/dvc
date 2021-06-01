@@ -7,13 +7,14 @@ def get_odb(fs, **config):
     from .base import ObjectDB
     from .gdrive import GDriveObjectDB
     from .local import LocalObjectDB
-    from .ssh import SSHObjectDB
+
+    # from .ssh import SSHObjectDB
 
     if fs.scheme == Schemes.LOCAL:
         return LocalObjectDB(fs, **config)
 
-    if fs.scheme == Schemes.SSH:
-        return SSHObjectDB(fs, **config)
+    # if fs.scheme == Schemes.SSH:
+    #    return SSHObjectDB(fs, **config)
 
     if fs.scheme == Schemes.GDRIVE:
         return GDriveObjectDB(fs, **config)

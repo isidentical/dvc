@@ -158,10 +158,12 @@ class ObjectDB:
             yield from self.fs.walk_files(path_info, prefix=prefix)
 
     def _path_to_hash(self, path):
-        parts = self.fs.PATH_CLS(path).parts[-2:]
+        if not isinstance(path, self.fs.PATH_CLS):
+            path = self.fs.PATH_CLS(path)
 
+        parts = path.parts[-2:]
         if not (len(parts) == 2 and parts[0] and len(parts[0]) == 2):
-            raise ValueError(f"Bad cache file path '{path}'")
+            raise ValueError(f"Bad cache file path '{path.path}'")
 
         return "".join(parts)
 

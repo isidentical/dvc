@@ -23,7 +23,7 @@ class FSSpecWrapper(BaseFileSystem):
     @lru_cache(512)
     def _with_bucket(self, path):
         if isinstance(path, self.PATH_CLS):
-            return f"{path.bucket}/{path.path}"
+            return path.path
         return path
 
     def _strip_bucket(self, entry):
@@ -84,6 +84,7 @@ class FSSpecWrapper(BaseFileSystem):
         return self.fs.open(self._with_bucket(path_info), mode=mode)
 
     def copy(self, from_info, to_info):
+        self.makedirs(to_info.parent)
         self.fs.copy(self._with_bucket(from_info), self._with_bucket(to_info))
 
     def exists(self, path_info) -> bool:
@@ -115,18 +116,23 @@ class FSSpecWrapper(BaseFileSystem):
         info["name"] = self._strip_bucket(info["name"])
         return info
 
+    def makedirs(self, path_info):
+        self.fs.makedirs(self._with_bucket(path_info), exist_ok=True)
+
     def _upload_fobj(self, fobj, to_info):
+        self.makedirs(to_info.parent)
         with self.open(to_info, "wb") as fdest:
             shutil.copyfileobj(fobj, fdest, length=fdest.blocksize)
 
     def _upload(
         self, from_file, to_info, name=None, no_progress_bar=False, **kwargs
     ):
+        self.makedirs(to_info.parent)
         total = os.path.getsize(from_file)
         with open(from_file, "rb") as fobj:
             self.upload_fobj(
                 fobj,
-                self._with_bucket(to_info),
+                to_info,
                 desc=name,
                 total=total,
                 no_progress_bar=no_progress_bar,
@@ -153,6 +159,12 @@ class FSSpecWrapper(BaseFileSystem):
 
 # pylint: disable=abstract-method
 class ObjectFSWrapper(FSSpecWrapper):
+    @lru_cache(512)
+    def _with_bucket(self, path):
+        if isinstance(path, self.PATH_CLS):
+            return f"{path.bucket}/{path.path}"
+        return path
+
     def _isdir(self, path_info):
         # Directory in object storages are interpreted differently
         # among different fsspec providers, so this logic is a temporary
