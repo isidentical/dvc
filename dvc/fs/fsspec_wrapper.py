@@ -5,6 +5,7 @@ from functools import lru_cache
 from funcy import cached_property
 from tqdm.utils import CallbackIOWrapper
 
+from dvc.hash_info import HashInfo
 from dvc.progress import DEFAULT_CALLBACK
 
 from .base import BaseFileSystem
@@ -86,7 +87,12 @@ class FSSpecWrapper(BaseFileSystem):
         return self.fs.open(self._with_bucket(path_info), mode=mode)
 
     def checksum(self, path_info):
-        return self.fs.checksum(self._with_bucket(path_info))
+        checksum_value = self.fs.checksum(self._with_bucket(path_info))
+        return HashInfo(
+            "checksum",
+            checksum_value,
+            size=self.getsize(path_info),
+        )
 
     def copy(self, from_info, to_info):
         self.makedirs(to_info.parent)
