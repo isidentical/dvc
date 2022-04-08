@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
     - name: Set up Python 3.8
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v3.1.1
       with:
         python-version: 3.8
     - name: Set up Ruby 2.4
@@ -41,7 +41,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
     - name: Set up Python 3.8
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v3.1.1
       with:
         python-version: 3.8
     - name: Set up Ruby 2.4
@@ -70,7 +70,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
     - name: Set up Python 3.8
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v3.1.1
       with:
         python-version: 3.8
     - name: Set up Ruby 2.4
@@ -102,7 +102,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
     - name: Set up Python 3.8
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v3.1.1
       with:
         python-version: 3.8
     - name: Install deps
@@ -130,7 +130,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2.3.4
     - name: Set up Python 3.7
-      uses: actions/setup-python@v2.2.2
+      uses: actions/setup-python@v3.1.1
       with:
         python-version: 3.7
     - name: Install
